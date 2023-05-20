@@ -32,9 +32,31 @@ async function run() {
 
     const toysCollection = client.db("toyHouse").collection("toysCollection");
 
+    const indexKeys = { toyTitle: 1 };
+    const indexOptions = { name: "title" };
+
+    const result = await toysCollection.createIndex(indexKeys, indexOptions);
+
+    app.get("/searchByName/:name", async (req, res) => {
+      const searchText = req.params.name;
+      const result = await toysCollection
+        .find({
+          $or: [{ toyTitle: { $regex: searchText, $options: "i" } }],
+        })
+        .toArray();
+      res.send(result);
+    });
+
     app.get("/allToys", async (req, res) => {
       const cursor = toysCollection.find();
       const result = await cursor.toArray();
+      res.send(result);
+    });
+
+    app.get("/toy/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await toysCollection.findOne(query);
       res.send(result);
     });
 
