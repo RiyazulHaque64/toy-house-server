@@ -56,17 +56,26 @@ async function run() {
 
     app.get("/sort/:query", async (req, res) => {
       const sortQuery = req.params.query;
+      const user = { sellerEmail: req.query.seller };
       let result;
       if (sortQuery === "highToLow") {
-        result = await toysCollection.find().sort({ price: -1 }).toArray();
+        result = await toysCollection.find(user).sort({ price: -1 }).toArray();
       } else if (sortQuery === "lowToHigh") {
-        result = await toysCollection.find().sort({ price: 1 }).toArray();
+        result = await toysCollection.find(user).sort({ price: 1 }).toArray();
       }
       res.send(result);
     });
 
     app.get("/allToys", async (req, res) => {
       const cursor = toysCollection.find();
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+
+    app.get("/allToys/:category", async (req, res) => {
+      const category = req.params.category;
+      const query = { category: category };
+      const cursor = toysCollection.find(query).limit(20);
       const result = await cursor.toArray();
       res.send(result);
     });

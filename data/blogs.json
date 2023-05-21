@@ -1,0 +1,22 @@
+[
+    {
+        "id": 1,
+        "question": "When should you use Context API?",
+        "answer": "When we use any data in multiple components and nested components, then we use Context API to avoid prop drilling."
+    },
+    {
+        "id": 2,
+        "question": "What is custom hook?",
+        "answer": "Custom Hook is a JavaScript function which we create by ourselves, when we want to share logic between other JavaScript functions. It allows us to reuse some piece of code in several parts of our app."
+    },
+    {
+        "id": 3,
+        "question": "What is useRef?",
+        "answer": "useRef is a built in react hook. we can directly access the elements of the DOM by useRef hook."
+    },
+    {
+        "id": 4,
+        "question": "What is useMemo?",
+        "answer": "useMemo is a built-in react hook, thats memoizes values in our React application. These values usually come from expensive functions, and we use the useMemo hook to store the value, so the expensive function doesn’t always run."
+    }
+]
