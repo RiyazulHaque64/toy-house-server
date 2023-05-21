@@ -5,6 +5,13 @@ require("dotenv").config();
 
 const app = express();
 
+const corsConfig = {
+  origin: "",
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE"],
+};
+app.use(cors(corsConfig));
+app.options("", cors(corsConfig));
 app.use(cors());
 app.use(express.json());
 
@@ -28,7 +35,7 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
+    // await client.connect();
 
     const toysCollection = client.db("toyHouse").collection("toysCollection");
 
@@ -44,6 +51,17 @@ async function run() {
           $or: [{ toyTitle: { $regex: searchText, $options: "i" } }],
         })
         .toArray();
+      res.send(result);
+    });
+
+    app.get("/sort/:query", async (req, res) => {
+      const sortQuery = req.params.query;
+      let result;
+      if (sortQuery === "highToLow") {
+        result = await toysCollection.find().sort({ price: -1 }).toArray();
+      } else if (sortQuery === "lowToHigh") {
+        result = await toysCollection.find().sort({ price: 1 }).toArray();
+      }
       res.send(result);
     });
 
